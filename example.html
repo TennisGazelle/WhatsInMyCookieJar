@@ -68,17 +68,6 @@
       justify-content: center;
     }
 
-    .bigger {
-        margin: 0;
-        font-size: 60px;
-        font-weight: 800;
-        padding: 20px;
-        color: #2f2924;
-        display: inline-block;
-        position: relative;
-        text-align: center;
-    }
-
     .quote-intro {
       font-family: "Inter", sans-serif;
       font-size: 1.5rem;
@@ -96,10 +85,20 @@
       padding: 0 20px 20px;
       border-left: 3px solid #d6a06a;
       text-align: left;
+      font-family: "DM Serif Display", serif;
+      font-style: italic;
+      font-weight: 800;
+      font-size: 2.75rem;
+      line-height: 1.35;
+      color: #57534e;
     }
 
     .snapshot-quote p {
       margin: 0;
+    }
+
+    .has-animation.animation-text-swipe blockquote {
+      text-shadow: 1px 5px 32px rgba(0, 0, 0, 0);
     }
 
     .snapshot-location-cell {
@@ -179,18 +178,26 @@
 
     .has-animation.animation-text-swipe.animate-in h1,
     .has-animation.animation-text-swipe.animate-in p,
-    .has-animation.animation-text-swipe.animate-in blockquote,
     .has-animation.animation-text-swipe.animate-in img {
       animation: textSwipeLTR 1.8s ease forwards;
     }
 
+    .has-animation.animation-text-swipe.animate-in blockquote {
+      animation: quoteSwipeLTR 1.8s ease forwards;
+    }
+
     .has-animation.animation-text-swipe.animation-rtl.animate-in h1,
     .has-animation.animation-text-swipe.animation-rtl.animate-in p,
-    .has-animation.animation-text-swipe.animation-rtl.animate-in blockquote,
     .has-animation.animation-text-swipe.animation-rtl.animate-in img {
       -webkit-mask-image: linear-gradient(270deg, #000 50%, transparent 50%);
       mask-image: linear-gradient(270deg, #000 50%, transparent 50%);
       animation: textSwipeRTL 1.8s ease forwards;
+    }
+
+    .has-animation.animation-text-swipe.animation-rtl.animate-in blockquote {
+      -webkit-mask-image: linear-gradient(270deg, #000 50%, transparent 50%);
+      mask-image: linear-gradient(270deg, #000 50%, transparent 50%);
+      animation: quoteSwipeRTL 1.8s ease forwards;
     }
 
     /* Whole card: fade in from fully transparent + delayed shadow lift */
@@ -296,6 +303,32 @@
       }
     }
 
+    @keyframes quoteSwipeLTR {
+      0% {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+        text-shadow: 1px 5px 32px rgba(0, 0, 0, 0);
+      }
+      100% {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+        text-shadow: 1px 5px 32px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    @keyframes quoteSwipeRTL {
+      0% {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+        text-shadow: 1px 5px 32px rgba(0, 0, 0, 0);
+      }
+      100% {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+        text-shadow: 1px 5px 32px rgba(0, 0, 0, 0.3);
+      }
+    }
+
     @keyframes cardFadeIn {
       0% {
         opacity: 0;
@@ -343,6 +376,10 @@
       .has-animation.animation-text-swipe img {
         -webkit-mask: none;
         mask: none;
+      }
+
+      .has-animation.animation-text-swipe blockquote {
+        text-shadow: 1px 5px 32px rgba(0, 0, 0, 0.3);
       }
 
       .card.has-animation.animation-card-swipe {
@@ -398,7 +435,7 @@
       </div>
 
       <div id="snapshot-quote-wrap" class="has-animation animation-text-swipe" data-delay="3000">
-        <blockquote class="snapshot-quote title-font bigger text-stone-600 leading-relaxed">
+        <blockquote class="snapshot-quote leading-relaxed text-stone-600">
           <p id="snapshot-quote">You are on your computer in … that likes light mode.</p>
         </blockquote>
       </div>
@@ -407,7 +444,7 @@
 
     <!-- SNAPSHOT -->
 
-    <div class="card p-7 mb-8 has-animation animation-card-swipe" data-delay="3000">
+    <div class="card p-7 mb-8 has-animation animation-card-swipe" data-delay="6000">
 
       <div class="flex items-center justify-between mb-6">
 
@@ -490,7 +527,7 @@
 
     <!-- COOKIE SECTION -->
 
-    <div class="card p-7 has-animation animation-card-swipe" data-delay="6000">
+    <div class="card p-7 has-animation animation-card-swipe" data-delay="9000">
 
       <h2 class="text-2xl font-semibold mb-3">
         Open your cookie jar?
@@ -926,7 +963,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       populateBrowserSnapshot();
 
-      /* Sequence via data-delay: quote (0s) → snapshot card (3s) → cookie card (6s) */
+      /* Sequence via data-delay: intro (0s) → quote (3s) → snapshot card (6s) → cookie card (9s) */
       document.documentElement.style.setProperty('--card-shadow-delay', '0ms');
 
       document.querySelectorAll('.has-animation').forEach((el) => {
