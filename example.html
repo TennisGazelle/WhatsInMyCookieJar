@@ -78,6 +78,38 @@
         position: relative;
         text-align: center;
     }
+
+    .quote-intro {
+      font-family: "Inter", sans-serif;
+      font-size: 1.5rem;
+      line-height: 1.6;
+      font-weight: 500;
+      margin: 0;
+      padding: 20px;
+      color: #57534e;
+      text-align: center;
+    }
+
+    .snapshot-quote {
+      margin: 0 auto;
+      max-width: 42rem;
+      padding: 0 20px 20px;
+      border-left: 3px solid #d6a06a;
+      text-align: left;
+    }
+
+    .snapshot-quote p {
+      margin: 0;
+    }
+
+    .snapshot-location-cell {
+      vertical-align: top;
+    }
+
+    .snapshot-location-cell .snapshot-location-value {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
     .has-animation {
       position: relative;
       overflow: hidden;
@@ -85,6 +117,7 @@
 
     .has-animation:not(.animation-card-swipe) p,
     .has-animation:not(.animation-card-swipe) h1,
+    .has-animation:not(.animation-card-swipe) blockquote,
     .has-animation:not(.animation-card-swipe) img {
       opacity: 0;
     }
@@ -126,6 +159,7 @@
     /* Text reveals via horizontal transparency swipe (no bar overlay) */
     .has-animation.animation-text-swipe h1,
     .has-animation.animation-text-swipe p,
+    .has-animation.animation-text-swipe blockquote,
     .has-animation.animation-text-swipe img {
       opacity: 1;
       -webkit-mask-image: linear-gradient(90deg, #000 50%, transparent 50%);
@@ -145,32 +179,26 @@
 
     .has-animation.animation-text-swipe.animate-in h1,
     .has-animation.animation-text-swipe.animate-in p,
+    .has-animation.animation-text-swipe.animate-in blockquote,
     .has-animation.animation-text-swipe.animate-in img {
       animation: textSwipeLTR 1.8s ease forwards;
     }
 
     .has-animation.animation-text-swipe.animation-rtl.animate-in h1,
     .has-animation.animation-text-swipe.animation-rtl.animate-in p,
+    .has-animation.animation-text-swipe.animation-rtl.animate-in blockquote,
     .has-animation.animation-text-swipe.animation-rtl.animate-in img {
       -webkit-mask-image: linear-gradient(270deg, #000 50%, transparent 50%);
       mask-image: linear-gradient(270deg, #000 50%, transparent 50%);
       animation: textSwipeRTL 1.8s ease forwards;
     }
 
-    /* Whole card: horizontal transparency swipe + delayed shadow lift */
+    /* Whole card: fade in from fully transparent + delayed shadow lift */
     .card.has-animation.animation-card-swipe {
-      opacity: 1;
-      box-shadow:
-        0 2px 8px rgba(82, 58, 36, 0.02),
-        inset 0 1px 0 rgba(255,255,255,0.4);
-      -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 95%, transparent 100%);
-      mask-image: linear-gradient(90deg, #000 0%, #000 95%, transparent 100%);
-      -webkit-mask-size: 202% 100%;
-      mask-size: 202% 100%;
-      -webkit-mask-repeat: no-repeat;
-      mask-repeat: no-repeat;
-      -webkit-mask-position: 100% 0;
-      mask-position: 100% 0;
+      opacity: 0;
+      box-shadow: none;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
     }
 
     .card.has-animation.animation-card-swipe h1,
@@ -187,8 +215,8 @@
 
     .card.has-animation.animation-card-swipe.animate-in {
       animation:
-        cardSwipeLTR 0.95s cubic-bezier(0.4, 0, 0.2, 1) forwards,
-        cardShadowIn 1.2s ease var(--card-shadow-delay, 1000ms) forwards;
+        cardFadeIn 0.95s cubic-bezier(0.4, 0, 0.2, 1) var(--card-shadow-delay, 0ms) forwards,
+        cardShadowIn 1.2s ease var(--card-shadow-delay, 0ms) forwards;
     }
 
     .has-animation.animation-ltr.animate-in::before {
@@ -268,33 +296,32 @@
       }
     }
 
-    @keyframes cardSwipeLTR {
+    @keyframes cardFadeIn {
       0% {
-        -webkit-mask-position: 100% 0;
-        mask-position: 100% 0;
+        opacity: 0;
       }
       100% {
-        -webkit-mask-position: 0 0;
-        mask-position: 0 0;
+        opacity: 1;
       }
     }
 
     @keyframes cardShadowIn {
       0% {
-        box-shadow:
-          0 2px 8px rgba(82, 58, 36, 0.02),
-          inset 0 1px 0 rgba(255,255,255,0.4);
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
       }
       100% {
-        box-shadow:
-          0 10px 35px rgba(82, 58, 36, 0.08),
-          inset 0 1px 0 rgba(255,255,255,0.4);
+        box-shadow: -2px 25px 23px 0px rgba(0, 0, 0, 0.75);
+        -webkit-box-shadow: -2px 25px 23px 0px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: -2px 25px 23px 0px rgba(0, 0, 0, 0.75);
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
       .has-animation p,
       .has-animation h1,
+      .has-animation blockquote,
       .has-animation img {
         opacity: 1;
       }
@@ -312,17 +339,17 @@
 
       .has-animation.animation-text-swipe h1,
       .has-animation.animation-text-swipe p,
+      .has-animation.animation-text-swipe blockquote,
       .has-animation.animation-text-swipe img {
         -webkit-mask: none;
         mask: none;
       }
 
       .card.has-animation.animation-card-swipe {
-        -webkit-mask: none;
-        mask: none;
-        box-shadow:
-          0 10px 35px rgba(82, 58, 36, 0.08),
-          inset 0 1px 0 rgba(255,255,255,0.4);
+        opacity: 1;
+        box-shadow: -2px 25px 23px 0px rgba(0, 0, 0, 0.75);
+        -webkit-box-shadow: -2px 25px 23px 0px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: -2px 25px 23px 0px rgba(0, 0, 0, 0.75);
       }
 
       .card.has-animation.animation-card-swipe.animate-in {
@@ -363,29 +390,31 @@
 
       </div>
 
-      <div class="has-animation animation-text-swipe" data-delay="1000">
-        <h1 class="bigger text-4xl center items-center justify-center title-font text-stone-600 leading-relaxed">
-            Websites quietly learn things about your browser and device
-            before you even click “Accept Cookies.”
-        </h1>
+      <div class="has-animation animation-text-swipe" data-delay="0">
+        <p class="quote-intro">
+          Websites quietly learn things about your browser and device
+          before you even click “Accept Cookies.”
+        </p>
+      </div>
+
+      <div id="snapshot-quote-wrap" class="has-animation animation-text-swipe" data-delay="3000">
+        <blockquote class="snapshot-quote title-font bigger text-stone-600 leading-relaxed">
+          <p id="snapshot-quote">You are on your computer in … that likes light mode.</p>
+        </blockquote>
       </div>
 
     </div>
 
     <!-- SNAPSHOT -->
 
-    <div class="card p-7 mb-8 has-animation animation-card-swipe" data-delay="1000">
+    <div class="card p-7 mb-8 has-animation animation-card-swipe" data-delay="3000">
 
       <div class="flex items-center justify-between mb-6">
 
         <div>
 
-          <h2 class="text-2xl font-semibold">
-            Your Browser Snapshot
-          </h2>
-
-          <p class="text-stone-500 mt-1">
-            Mocked example data for now
+          <p class="text-stone-500">
+            Read from your browser right now
           </p>
 
         </div>
@@ -404,51 +433,46 @@
 
             <tr class="table-row border-b border-stone-100">
               <td class="p-4 font-medium">Approximate Location</td>
-              <td class="p-4 text-right text-stone-600">
-                Sacramento, California
+              <td class="p-4 text-right text-stone-600 snapshot-location-cell">
+                <span id="snapshot-location" class="snapshot-location-value">…</span>
+                <button
+                  type="button"
+                  id="snapshot-location-btn"
+                  class="soft-button text-sm px-3 py-1.5 rounded-xl bg-stone-200 hover:bg-stone-300"
+                >
+                  Share location
+                </button>
               </td>
             </tr>
 
             <tr class="table-row border-b border-stone-100">
               <td class="p-4 font-medium">Browser</td>
-              <td class="p-4 text-right text-stone-600">
-                Chrome 136
-              </td>
+              <td id="snapshot-browser" class="p-4 text-right text-stone-600">…</td>
             </tr>
 
             <tr class="table-row border-b border-stone-100">
               <td class="p-4 font-medium">Operating System</td>
-              <td class="p-4 text-right text-stone-600">
-                macOS
-              </td>
+              <td id="snapshot-os" class="p-4 text-right text-stone-600">…</td>
             </tr>
 
             <tr class="table-row border-b border-stone-100">
               <td class="p-4 font-medium">Likely Device</td>
-              <td class="p-4 text-right text-stone-600">
-                MacBook Pro
-              </td>
+              <td id="snapshot-device" class="p-4 text-right text-stone-600">…</td>
             </tr>
 
             <tr class="table-row border-b border-stone-100">
               <td class="p-4 font-medium">Screen Resolution</td>
-              <td class="p-4 text-right text-stone-600">
-                2560 × 1440
-              </td>
+              <td id="snapshot-screen" class="p-4 text-right text-stone-600">…</td>
             </tr>
 
             <tr class="table-row border-b border-stone-100">
               <td class="p-4 font-medium">Timezone</td>
-              <td class="p-4 text-right text-stone-600">
-                America/Los_Angeles
-              </td>
+              <td id="snapshot-timezone" class="p-4 text-right text-stone-600">…</td>
             </tr>
 
             <tr class="table-row">
               <td class="p-4 font-medium">Dark Mode</td>
-              <td class="p-4 text-right text-stone-600">
-                Enabled
-              </td>
+              <td id="snapshot-dark-mode" class="p-4 text-right text-stone-600">…</td>
             </tr>
 
           </tbody>
@@ -466,7 +490,7 @@
 
     <!-- COOKIE SECTION -->
 
-    <div class="card p-7">
+    <div class="card p-7 has-animation animation-card-swipe" data-delay="6000">
 
       <h2 class="text-2xl font-semibold mb-3">
         Open your cookie jar?
@@ -636,14 +660,274 @@
   <!-- SCRIPT -->
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const textDelay =
-        Number(document.querySelector('.animation-text-swipe')?.dataset.delay) || 0;
-      /* Shadow lifts at 2× text start (e.g. 2s when text delay is 1s) */
-      document.documentElement.style.setProperty(
-        '--card-shadow-delay',
-        `${textDelay}ms`
+    const NOMINATIM_USER_AGENT =
+      'WhatsMyCookieJar/1.0 (educational demo; local file)';
+
+    const snapshotState = {
+      deviceCategory: 'computer',
+      place: '…',
+      placeIsCity: false,
+      colorMode: 'light mode',
+    };
+
+    function setSnapshotCell(id, text) {
+      const cell = document.getElementById(id);
+      if (cell) cell.textContent = text;
+    }
+
+    function setLocationDisplay(text) {
+      const el = document.getElementById('snapshot-location');
+      if (el) el.textContent = text;
+    }
+
+    function buildSnapshotQuote(state) {
+      return `You are on your ${state.deviceCategory} in ${state.place} that likes ${state.colorMode}.`;
+    }
+
+    function renderSnapshotQuote() {
+      const el = document.getElementById('snapshot-quote');
+      if (el) el.textContent = buildSnapshotQuote(snapshotState);
+    }
+
+    function parseUserAgent(ua) {
+      const rules = [
+        { name: 'Edge', re: /Edg(?:e|A|iOS)?\/([\d.]+)/ },
+        { name: 'Opera', re: /OPR\/([\d.]+)/ },
+        { name: 'Chrome', re: /Chrome\/([\d.]+)/ },
+        { name: 'Firefox', re: /Firefox\/([\d.]+)/ },
+        { name: 'Safari', re: /Version\/([\d.]+).*Safari/ },
+      ];
+      for (const { name, re } of rules) {
+        const match = ua.match(re);
+        if (match) return `${name} ${match[1].split('.')[0]}`;
+      }
+      return 'Unknown browser';
+    }
+
+    function detectOS(ua, platform) {
+      if (/Windows NT 10/.test(ua)) return 'Windows 10 or later';
+      if (/Windows NT/.test(ua)) return 'Windows';
+      if (/Mac OS X|Macintosh/.test(ua)) {
+        const ver = ua.match(/Mac OS X (\d+[._]\d+)/);
+        return ver ? `macOS ${ver[1].replace('_', '.')}` : 'macOS';
+      }
+      const android = ua.match(/Android (\d+(?:\.\d+)?)/);
+      if (android) return `Android ${android[1]}`;
+      const ios = ua.match(/iPhone OS (\d+[._]\d+)/);
+      if (ios) return `iOS ${ios[1].replace('_', '.')}`;
+      if (/iPad/.test(ua)) return 'iPadOS';
+      if (/CrOS/.test(ua)) return 'ChromeOS';
+      if (/Linux/.test(ua)) return 'Linux';
+      return platform || 'Unknown OS';
+    }
+
+    function detectDevice(ua) {
+      const w = window.screen.width;
+      const h = window.screen.height;
+      const touch = navigator.maxTouchPoints > 0;
+
+      if (/iPhone/.test(ua)) return 'iPhone';
+      if (/iPad/.test(ua)) return 'iPad';
+      if (/Android/.test(ua)) {
+        if (/Mobile/.test(ua)) return 'Android phone';
+        return 'Android tablet';
+      }
+      if (/Macintosh/.test(ua) && touch) return 'Mac (touchscreen)';
+      if (/Macintosh/.test(ua)) return 'Mac';
+      if (/Windows/.test(ua)) return 'Windows PC';
+      if (/CrOS/.test(ua)) return 'Chromebook';
+      if (touch && Math.min(w, h) < 768) return 'Mobile device';
+      if (touch) return 'Touchscreen device';
+      return 'Desktop or laptop';
+    }
+
+    function formatCoordinates(lat, lng) {
+      const latAbs = Math.abs(lat).toFixed(2);
+      const lngAbs = Math.abs(lng).toFixed(2);
+      const latHem = lat >= 0 ? 'N' : 'S';
+      const lngHem = lng >= 0 ? 'E' : 'W';
+      return `${latAbs}° ${latHem}, ${lngAbs}° ${lngHem}`;
+    }
+
+    function approxPlaceLabel() {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      try {
+        const parts = new Intl.DateTimeFormat(undefined, {
+          timeZone: tz,
+          timeZoneName: 'long',
+        }).formatToParts(new Date());
+        const name = parts.find((p) => p.type === 'timeZoneName')?.value;
+        if (name) return name;
+      } catch {
+        /* keep IANA id */
+      }
+      return tz;
+    }
+
+    function deviceCategoryForQuote(ua) {
+      const device = detectDevice(ua);
+      if (/phone|Mobile device/i.test(device)) return 'phone';
+      return 'computer';
+    }
+
+    function colorModePhrase() {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark mode'
+        : 'light mode';
+    }
+
+    async function reverseGeocodeCity(lat, lon) {
+      const url = new URL('https://nominatim.openstreetmap.org/reverse');
+      url.searchParams.set('lat', String(lat));
+      url.searchParams.set('lon', String(lon));
+      url.searchParams.set('format', 'json');
+      const res = await fetch(url, {
+        headers: {
+          Accept: 'application/json',
+          'User-Agent': NOMINATIM_USER_AGENT,
+        },
+      });
+      if (!res.ok) throw new Error('Reverse geocode failed');
+      const data = await res.json();
+      const a = data.address || {};
+      return (
+        a.city ||
+        a.town ||
+        a.village ||
+        a.municipality ||
+        a.county ||
+        null
       );
+    }
+
+    function geolocationErrorMessage(error) {
+      if (!error) return "Couldn't get location";
+      if (error.code === error.PERMISSION_DENIED) return 'Permission denied';
+      if (error.code === error.TIMEOUT) return 'Location timed out';
+      return "Couldn't get location";
+    }
+
+    function requestSnapshotLocation() {
+      const btn = document.getElementById('snapshot-location-btn');
+      if (!navigator.geolocation) {
+        setLocationDisplay('Not available in this browser');
+        if (btn) btn.disabled = true;
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Locating…';
+      }
+      setLocationDisplay('Requesting permission…');
+
+      navigator.geolocation.getCurrentPosition(
+        async (pos) => {
+          const { latitude, longitude, accuracy } = pos.coords;
+          const coords = formatCoordinates(latitude, longitude);
+          const accuracyText =
+            accuracy != null ? ` ±${Math.round(accuracy)} m` : '';
+          setLocationDisplay(`${coords}${accuracyText}`);
+
+          try {
+            const city = await reverseGeocodeCity(latitude, longitude);
+            if (city) {
+              snapshotState.place = city;
+              snapshotState.placeIsCity = true;
+              renderSnapshotQuote();
+            }
+          } catch {
+            /* keep coords in table; quote keeps approx place */
+          }
+
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Update location';
+          }
+        },
+        (error) => {
+          setLocationDisplay(geolocationErrorMessage(error));
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Share location';
+          }
+        },
+        { maximumAge: 600_000, timeout: 8000, enableHighAccuracy: false }
+      );
+    }
+
+    function wireSnapshotLocationButton() {
+      const btn = document.getElementById('snapshot-location-btn');
+      if (!btn) return;
+      if (!navigator.geolocation) {
+        btn.disabled = true;
+        setLocationDisplay('Not available in this browser');
+        return;
+      }
+      btn.addEventListener('click', requestSnapshotLocation);
+    }
+
+    async function detectBrowser() {
+      if (navigator.userAgentData?.getHighEntropyValues) {
+        try {
+          const { brands, fullVersionList } =
+            await navigator.userAgentData.getHighEntropyValues([
+              'brands',
+              'fullVersionList',
+            ]);
+          const list = fullVersionList?.length ? fullVersionList : brands;
+          const primary = list?.find(
+            (b) => b.brand && !/not.a.brand|chromium/i.test(b.brand)
+          );
+          if (primary) {
+            const version = primary.version.split('.')[0];
+            return `${primary.brand} ${version}`;
+          }
+        } catch {
+          /* fall through */
+        }
+      }
+      return parseUserAgent(navigator.userAgent);
+    }
+
+    function populateBrowserSnapshot() {
+      const ua = navigator.userAgent;
+      const platform = navigator.userAgentData?.platform || navigator.platform;
+
+      snapshotState.deviceCategory = deviceCategoryForQuote(ua);
+      snapshotState.place = approxPlaceLabel();
+      snapshotState.placeIsCity = false;
+      snapshotState.colorMode = colorModePhrase();
+      renderSnapshotQuote();
+
+      detectBrowser().then((browser) => setSnapshotCell('snapshot-browser', browser));
+
+      setSnapshotCell('snapshot-os', detectOS(ua, platform));
+      setSnapshotCell('snapshot-device', detectDevice(ua));
+      setSnapshotCell(
+        'snapshot-screen',
+        `${screen.width} × ${screen.height} (${window.devicePixelRatio}x)`
+      );
+      setSnapshotCell(
+        'snapshot-timezone',
+        Intl.DateTimeFormat().resolvedOptions().timeZone
+      );
+      setSnapshotCell(
+        'snapshot-dark-mode',
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'Enabled'
+          : 'Disabled'
+      );
+
+      setLocationDisplay(`${approxPlaceLabel()} (inferred)`);
+      wireSnapshotLocationButton();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      populateBrowserSnapshot();
+
+      /* Sequence via data-delay: quote (0s) → snapshot card (3s) → cookie card (6s) */
+      document.documentElement.style.setProperty('--card-shadow-delay', '0ms');
 
       document.querySelectorAll('.has-animation').forEach((el) => {
         const delay = Number(el.dataset.delay) || 0;
