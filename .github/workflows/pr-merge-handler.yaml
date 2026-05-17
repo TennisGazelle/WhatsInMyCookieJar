@@ -3,7 +3,7 @@ name: Deploy static page after PR merge
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 permissions:
