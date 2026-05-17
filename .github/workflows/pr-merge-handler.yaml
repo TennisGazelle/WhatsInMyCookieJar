@@ -37,7 +37,7 @@ jobs:
             ./ dist/
 
           # Optional but useful if you are using a custom domain.
-          echo "whatsinmycookiejar.com" > dist/CNAME
+          echo "www.whatsinmycookiejar.com" > dist/CNAME
 
           # Prevent GitHub Pages from trying to process the site with Jekyll.
           touch dist/.nojekyll
