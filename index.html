@@ -98,7 +98,7 @@
     }
 
     .has-animation.animation-text-swipe blockquote {
-      text-shadow: 1px 5px 32px rgba(0, 0, 0, 0);
+        text-shadow: 1px 5px 16px rgba(0,0,0,0.16);
     }
 
     .snapshot-location-cell {
@@ -307,12 +307,12 @@
       0% {
         -webkit-mask-position: 100% 0;
         mask-position: 100% 0;
-        text-shadow: 1px 5px 32px rgba(0, 0, 0, 0);
+        text-shadow: 1px 5px 16px rgba(0,0,0,0.16);
       }
       100% {
         -webkit-mask-position: 0 0;
         mask-position: 0 0;
-        text-shadow: 1px 5px 32px rgba(0, 0, 0, 0.3);
+        text-shadow: 1px 5px 16px rgba(0,0,0,0.16);
       }
     }
 
@@ -320,12 +320,12 @@
       0% {
         -webkit-mask-position: 100% 0;
         mask-position: 100% 0;
-        text-shadow: 1px 5px 32px rgba(0, 0, 0, 0);
+        text-shadow: 1px 5px 16px rgba(0,0,0,0.16);
       }
       100% {
         -webkit-mask-position: 0 0;
         mask-position: 0 0;
-        text-shadow: 1px 5px 32px rgba(0, 0, 0, 0.3);
+        text-shadow: 1px 5px 16px rgba(0,0,0,0.16);
       }
     }
 
@@ -701,6 +701,7 @@
       'WhatsMyCookieJar/1.0 (educational demo; local file)';
 
     const snapshotState = {
+      operatingSystem: '…',
       deviceCategory: 'computer',
       place: '…',
       placeIsCity: false,
@@ -718,7 +719,7 @@
     }
 
     function buildSnapshotQuote(state) {
-      return `You are on your ${state.deviceCategory} in ${state.place} that likes ${state.colorMode}.`;
+      return `You are on your ${state.operatingSystem} ${state.deviceCategory} in ${state.place} and you like ${state.colorMode}.`;
     }
 
     function renderSnapshotQuote() {
@@ -931,6 +932,8 @@
       const ua = navigator.userAgent;
       const platform = navigator.userAgentData?.platform || navigator.platform;
 
+      const operatingSystem = detectOS(ua, platform);
+      snapshotState.operatingSystem = operatingSystem;
       snapshotState.deviceCategory = deviceCategoryForQuote(ua);
       snapshotState.place = approxPlaceLabel();
       snapshotState.placeIsCity = false;
@@ -939,7 +942,7 @@
 
       detectBrowser().then((browser) => setSnapshotCell('snapshot-browser', browser));
 
-      setSnapshotCell('snapshot-os', detectOS(ua, platform));
+      setSnapshotCell('snapshot-os', operatingSystem);
       setSnapshotCell('snapshot-device', detectDevice(ua));
       setSnapshotCell(
         'snapshot-screen',
