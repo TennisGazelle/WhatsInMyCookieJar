@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>What's My Cookie Jar?</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root {
+      --color--main: #f6f1ea;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: #f6f1ea;
+      color: #2f2924;
+    }
+
+    .title-font {
+      font-family: "DM Serif Display", serif;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(10px);
+
+      border: 1px solid rgba(255,255,255,0.6);
+
+      border-radius: 28px;
+
+      box-shadow:
+        0 10px 35px rgba(82, 58, 36, 0.08),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+
+    .soft-button {
+      transition: 0.2s ease;
+    }
+
+    .soft-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .modal {
+      display: none;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .table-row:nth-child(even) {
+      background: rgba(245,240,235,0.5);
+    }
+
+    .header-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .bigger {
+        margin: 0;
+        font-size: 60px;
+        font-weight: 800;
+        padding: 20px;
+        color: #2f2924;
+        display: inline-block;
+        position: relative;
+        text-align: center;
+    }
+    .has-animation {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .has-animation:not(.animation-card-swipe) p,
+    .has-animation:not(.animation-card-swipe) h1,
+    .has-animation:not(.animation-card-swipe) img {
+      opacity: 0;
+    }
+
+    .has-animation.animate-in::before,
+    .has-animation.animate-in::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      height: 100%;
+      z-index: 10;
+    }
+
+    .has-animation.animation-ltr.animate-in::before,
+    .has-animation.animation-ltr.animate-in::after {
+      left: 0;
+    }
+
+    .has-animation.animation-rtl.animate-in::before,
+    .has-animation.animation-rtl.animate-in::after {
+      right: 0;
+    }
+
+    .has-animation.animate-in::before {
+      background-color: var(--color--main);
+    }
+
+    .has-animation.animate-in::after {
+      background-color: color-mix(in oklab, var(--color--main) 40%, black);
+      animation-delay: 0.5s;
+    }
+
+    .has-animation.animate-in:not(.animation-text-swipe) h1,
+    .has-animation.animate-in:not(.animation-text-swipe) p,
+    .has-animation.animate-in:not(.animation-text-swipe) img {
+      animation: textHidden 0.1s 1.1s forwards;
+    }
+
+    /* Text reveals via horizontal transparency swipe (no bar overlay) */
+    .has-animation.animation-text-swipe h1,
+    .has-animation.animation-text-swipe p,
+    .has-animation.animation-text-swipe img {
+      opacity: 1;
+      -webkit-mask-image: linear-gradient(90deg, #000 50%, transparent 50%);
+      mask-image: linear-gradient(90deg, #000 50%, transparent 50%);
+      -webkit-mask-size: 200% 100%;
+      mask-size: 200% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: 100% 0;
+      mask-position: 100% 0;
+    }
+
+    .has-animation.animation-text-swipe.animate-in::before,
+    .has-animation.animation-text-swipe.animate-in::after {
+      display: none;
+    }
+
+    .has-animation.animation-text-swipe.animate-in h1,
+    .has-animation.animation-text-swipe.animate-in p,
+    .has-animation.animation-text-swipe.animate-in img {
+      animation: textSwipeLTR 1.8s ease forwards;
+    }
+
+    .has-animation.animation-text-swipe.animation-rtl.animate-in h1,
+    .has-animation.animation-text-swipe.animation-rtl.animate-in p,
+    .has-animation.animation-text-swipe.animation-rtl.animate-in img {
+      -webkit-mask-image: linear-gradient(270deg, #000 50%, transparent 50%);
+      mask-image: linear-gradient(270deg, #000 50%, transparent 50%);
+      animation: textSwipeRTL 1.8s ease forwards;
+    }
+
+    /* Whole card: horizontal transparency swipe + delayed shadow lift */
+    .card.has-animation.animation-card-swipe {
+      opacity: 1;
+      box-shadow:
+        0 2px 8px rgba(82, 58, 36, 0.02),
+        inset 0 1px 0 rgba(255,255,255,0.4);
+      -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 95%, transparent 100%);
+      mask-image: linear-gradient(90deg, #000 0%, #000 95%, transparent 100%);
+      -webkit-mask-size: 202% 100%;
+      mask-size: 202% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: 100% 0;
+      mask-position: 100% 0;
+    }
+
+    .card.has-animation.animation-card-swipe h1,
+    .card.has-animation.animation-card-swipe h2,
+    .card.has-animation.animation-card-swipe p,
+    .card.has-animation.animation-card-swipe img {
+      opacity: 1;
+    }
+
+    .card.has-animation.animation-card-swipe.animate-in::before,
+    .card.has-animation.animation-card-swipe.animate-in::after {
+      display: none;
+    }
+
+    .card.has-animation.animation-card-swipe.animate-in {
+      animation:
+        cardSwipeLTR 0.95s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+        cardShadowIn 1.2s ease var(--card-shadow-delay, 1000ms) forwards;
+    }
+
+    .has-animation.animation-ltr.animate-in::before {
+      animation: revealLTR 1.8s ease;
+    }
+
+    .has-animation.animation-ltr.animate-in::after {
+      animation: revealLTR 1s 0.6s ease;
+    }
+
+    .has-animation.animation-rtl.animate-in::before {
+      animation: revealRTL 1.8s ease;
+    }
+
+    .has-animation.animation-rtl.animate-in::after {
+      animation: revealRTL 1s 0.6s ease;
+    }
+
+    @keyframes revealRTL {
+      0% {
+        width: 0;
+        right: 0;
+      }
+      65% {
+        width: 100%;
+        right: 0;
+      }
+      100% {
+        width: 0;
+        right: 100%;
+      }
+    }
+
+    @keyframes revealLTR {
+      0% {
+        width: 0;
+        left: 0;
+      }
+      65% {
+        width: 100%;
+        left: 0;
+      }
+      100% {
+        width: 0;
+        left: 100%;
+      }
+    }
+
+    @keyframes textHidden {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes textSwipeLTR {
+      0% {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+      }
+      100% {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+      }
+    }
+
+    @keyframes textSwipeRTL {
+      0% {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+      }
+      100% {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+      }
+    }
+
+    @keyframes cardSwipeLTR {
+      0% {
+        -webkit-mask-position: 100% 0;
+        mask-position: 100% 0;
+      }
+      100% {
+        -webkit-mask-position: 0 0;
+        mask-position: 0 0;
+      }
+    }
+
+    @keyframes cardShadowIn {
+      0% {
+        box-shadow:
+          0 2px 8px rgba(82, 58, 36, 0.02),
+          inset 0 1px 0 rgba(255,255,255,0.4);
+      }
+      100% {
+        box-shadow:
+          0 10px 35px rgba(82, 58, 36, 0.08),
+          inset 0 1px 0 rgba(255,255,255,0.4);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .has-animation p,
+      .has-animation h1,
+      .has-animation img {
+        opacity: 1;
+      }
+
+      .has-animation.animate-in::before,
+      .has-animation.animate-in::after {
+        display: none;
+      }
+
+      .has-animation.animate-in h1,
+      .has-animation.animate-in p,
+      .has-animation.animate-in img {
+        animation: none;
+      }
+
+      .has-animation.animation-text-swipe h1,
+      .has-animation.animation-text-swipe p,
+      .has-animation.animation-text-swipe img {
+        -webkit-mask: none;
+        mask: none;
+      }
+
+      .card.has-animation.animation-card-swipe {
+        -webkit-mask: none;
+        mask: none;
+        box-shadow:
+          0 10px 35px rgba(82, 58, 36, 0.08),
+          inset 0 1px 0 rgba(255,255,255,0.4);
+      }
+
+      .card.has-animation.animation-card-swipe.animate-in {
+        animation: none;
+      }
+    }
+
+  </style>
+</head>
+
+<body class="min-h-screen">
+
+  <!-- PAGE -->
+
+  <div class="max-w-4xl mx-auto px-6 py-12">
+
+    <!-- HERO -->
+
+    <div class="mb-10">
+
+      <div class="header-container">
+
+        <div class="flow-grow-1 w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-2xl shadow-sm">
+          🍪
+        </div>
+
+        <div class="flow-grow-2">
+
+          <h1 class="center title-font text-5xl leading-none">
+            What's My Cookie Jar?
+          </h1>
+
+          <p class="text-stone-500 mt-1">
+            A calmer way to understand internet tracking
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="has-animation animation-text-swipe" data-delay="1000">
+        <h1 class="bigger text-4xl center items-center justify-center title-font text-stone-600 leading-relaxed">
+            Websites quietly learn things about your browser and device
+            before you even click “Accept Cookies.”
+        </h1>
+      </div>
+
+    </div>
+
+    <!-- SNAPSHOT -->
+
+    <div class="card p-7 mb-8 has-animation animation-card-swipe" data-delay="1000">
+
+      <div class="flex items-center justify-between mb-6">
+
+        <div>
+
+          <h2 class="text-2xl font-semibold">
+            Your Browser Snapshot
+          </h2>
+
+          <p class="text-stone-500 mt-1">
+            Mocked example data for now
+          </p>
+
+        </div>
+
+        <div class="text-3xl">
+          ☕
+        </div>
+
+      </div>
+
+      <div class="overflow-hidden rounded-2xl border border-stone-100">
+
+        <table class="w-full">
+
+          <tbody>
+
+            <tr class="table-row border-b border-stone-100">
+              <td class="p-4 font-medium">Approximate Location</td>
+              <td class="p-4 text-right text-stone-600">
+                Sacramento, California
+              </td>
+            </tr>
+
+            <tr class="table-row border-b border-stone-100">
+              <td class="p-4 font-medium">Browser</td>
+              <td class="p-4 text-right text-stone-600">
+                Chrome 136
+              </td>
+            </tr>
+
+            <tr class="table-row border-b border-stone-100">
+              <td class="p-4 font-medium">Operating System</td>
+              <td class="p-4 text-right text-stone-600">
+                macOS
+              </td>
+            </tr>
+
+            <tr class="table-row border-b border-stone-100">
+              <td class="p-4 font-medium">Likely Device</td>
+              <td class="p-4 text-right text-stone-600">
+                MacBook Pro
+              </td>
+            </tr>
+
+            <tr class="table-row border-b border-stone-100">
+              <td class="p-4 font-medium">Screen Resolution</td>
+              <td class="p-4 text-right text-stone-600">
+                2560 × 1440
+              </td>
+            </tr>
+
+            <tr class="table-row border-b border-stone-100">
+              <td class="p-4 font-medium">Timezone</td>
+              <td class="p-4 text-right text-stone-600">
+                America/Los_Angeles
+              </td>
+            </tr>
+
+            <tr class="table-row">
+              <td class="p-4 font-medium">Dark Mode</td>
+              <td class="p-4 text-right text-stone-600">
+                Enabled
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <p class="mt-5 text-sm text-stone-500 leading-relaxed">
+        Most websites can infer this information automatically
+        before you interact with the page at all.
+      </p>
+
+    </div>
+
+    <!-- COOKIE SECTION -->
+
+    <div class="card p-7">
+
+      <h2 class="text-2xl font-semibold mb-3">
+        Open your cookie jar?
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6 max-w-2xl">
+        This demo can inspect common tracking cookies and explain
+        what advertising systems may infer from them.
+      </p>
+
+      <div class="flex flex-wrap gap-4">
+
+        <button
+          onclick="openRejectModal()"
+          class="soft-button px-6 py-3 rounded-2xl bg-stone-200 hover:bg-stone-300"
+        >
+          No Thanks
+        </button>
+
+        <button
+          onclick="openAcceptModal()"
+          class="soft-button px-6 py-3 rounded-2xl bg-amber-700 text-white hover:bg-amber-800"
+        >
+          Open The Jar
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- REJECT MODAL -->
+
+  <div
+    id="rejectModal"
+    class="modal fixed inset-0 bg-black/30 items-center justify-center px-6"
+  >
+
+    <div class="card max-w-md w-full p-8">
+
+      <div class="text-5xl mb-4">
+        ✅
+      </div>
+
+      <h3 class="title-font text-4xl mb-3">
+        Good call.
+      </h3>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        You generally shouldn’t hand your cookies to random websites.
+        That’s exactly the point of this project.
+      </p>
+
+      <button
+        onclick="closeRejectModal()"
+        class="soft-button w-full px-5 py-3 rounded-2xl bg-stone-200 hover:bg-stone-300"
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- ACCEPT MODAL -->
+
+  <div
+    id="acceptModal"
+    class="modal fixed inset-0 bg-black/30 items-center justify-center px-6"
+  >
+
+    <div class="card max-w-2xl w-full p-8">
+
+      <div class="flex items-center justify-between mb-6">
+
+        <div>
+
+          <h3 class="title-font text-5xl leading-none">
+            Your Cookie Jar
+          </h3>
+
+          <p class="text-stone-500 mt-2">
+            Mocked tracker data
+          </p>
+
+        </div>
+
+        <div class="text-4xl">
+          🍪
+        </div>
+
+      </div>
+
+      <!-- TABLE -->
+
+      <div class="overflow-hidden rounded-2xl border border-stone-100 mb-6">
+
+        <table class="w-full">
+
+          <thead class="bg-stone-50">
+
+            <tr>
+              <th class="text-left p-4">Cookie</th>
+              <th class="text-left p-4">Purpose</th>
+              <th class="text-left p-4">Company</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            <tr class="table-row border-t border-stone-100">
+              <td class="p-4 font-mono text-sm">_ga</td>
+              <td class="p-4 text-stone-600">Analytics tracking</td>
+              <td class="p-4 text-stone-600">Google</td>
+            </tr>
+
+            <tr class="table-row border-t border-stone-100">
+              <td class="p-4 font-mono text-sm">_fbp</td>
+              <td class="p-4 text-stone-600">Ad attribution</td>
+              <td class="p-4 text-stone-600">Meta</td>
+            </tr>
+
+            <tr class="table-row border-t border-stone-100">
+              <td class="p-4 font-mono text-sm">tt_pixel</td>
+              <td class="p-4 text-stone-600">Behavioral ads</td>
+              <td class="p-4 text-stone-600">TikTok</td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <!-- PROFILE -->
+
+      <div class="bg-amber-50 border border-amber-100 rounded-2xl p-5 mb-6">
+
+        <div class="font-semibold mb-2">
+          Possible advertising profile
+        </div>
+
+        <p class="text-stone-700 leading-relaxed">
+          Your browser activity may suggest interests in technology,
+          gaming, finance, travel, and online shopping.
+        </p>
+
+      </div>
+
+      <p class="text-sm text-stone-500 leading-relaxed mb-6">
+        This demo uses mocked example data for educational purposes.
+      </p>
+
+      <button
+        onclick="closeAcceptModal()"
+        class="soft-button w-full px-5 py-3 rounded-2xl bg-amber-700 text-white hover:bg-amber-800"
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- SCRIPT -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const textDelay =
+        Number(document.querySelector('.animation-text-swipe')?.dataset.delay) || 0;
+      /* Shadow lifts at 2× text start (e.g. 2s when text delay is 1s) */
+      document.documentElement.style.setProperty(
+        '--card-shadow-delay',
+        `${textDelay}ms`
+      );
+
+      document.querySelectorAll('.has-animation').forEach((el) => {
+        const delay = Number(el.dataset.delay) || 0;
+        setTimeout(() => el.classList.add('animate-in'), delay);
+      });
+    });
+
+    function openRejectModal() {
+      document.getElementById("rejectModal").classList.add("show");
+    }
+
+    function closeRejectModal() {
+      document.getElementById("rejectModal").classList.remove("show");
+    }
+
+    function openAcceptModal() {
+      document.getElementById("acceptModal").classList.add("show");
+    }
+
+    function closeAcceptModal() {
+      document.getElementById("acceptModal").classList.remove("show");
+    }
+
+  </script>
+
+</body>
+</html>
