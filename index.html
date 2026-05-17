@@ -15,6 +15,8 @@
 
     :root {
       --color--main: #f6f1ea;
+      --soft-shadow-sharp: 1px 5px 0 rgba(0, 0, 0, 0);
+      --soft-shadow-relaxed: 1px 5px 32px rgba(0, 0, 0, 0.3);
     }
 
     body {
@@ -41,11 +43,17 @@
     }
 
     .soft-button {
-      transition: 0.2s ease;
+      box-shadow: var(--soft-shadow-sharp);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .soft-button:hover {
       transform: translateY(-1px);
+    }
+
+    .card.has-animation.animation-card-swipe.animate-in .soft-button,
+    .modal.show .soft-button {
+      animation: softShadowIn 1.2s ease var(--card-shadow-delay, 0ms) forwards;
     }
 
     .modal {
@@ -98,7 +106,7 @@
     }
 
     .has-animation.animation-text-swipe blockquote {
-        text-shadow: 1px 5px 16px rgba(0,0,0,0.16);
+      text-shadow: var(--soft-shadow-sharp);
     }
 
     .snapshot-location-cell {
@@ -307,12 +315,12 @@
       0% {
         -webkit-mask-position: 100% 0;
         mask-position: 100% 0;
-        text-shadow: 1px 5px 16px rgba(0,0,0,0.16);
+        text-shadow: var(--soft-shadow-sharp);
       }
       100% {
         -webkit-mask-position: 0 0;
         mask-position: 0 0;
-        text-shadow: 1px 5px 16px rgba(0,0,0,0.16);
+        text-shadow: var(--soft-shadow-relaxed);
       }
     }
 
@@ -320,12 +328,21 @@
       0% {
         -webkit-mask-position: 100% 0;
         mask-position: 100% 0;
-        text-shadow: 1px 5px 16px rgba(0,0,0,0.16);
+        text-shadow: var(--soft-shadow-sharp);
       }
       100% {
         -webkit-mask-position: 0 0;
         mask-position: 0 0;
-        text-shadow: 1px 5px 16px rgba(0,0,0,0.16);
+        text-shadow: var(--soft-shadow-relaxed);
+      }
+    }
+
+    @keyframes softShadowIn {
+      0% {
+        box-shadow: var(--soft-shadow-sharp);
+      }
+      100% {
+        box-shadow: var(--soft-shadow-relaxed);
       }
     }
 
@@ -379,7 +396,12 @@
       }
 
       .has-animation.animation-text-swipe blockquote {
-        text-shadow: 1px 5px 32px rgba(0, 0, 0, 0.3);
+        text-shadow: var(--soft-shadow-relaxed);
+      }
+
+      .soft-button {
+        box-shadow: var(--soft-shadow-relaxed);
+        animation: none;
       }
 
       .card.has-animation.animation-card-swipe {
