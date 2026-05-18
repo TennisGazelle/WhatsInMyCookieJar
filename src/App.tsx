@@ -3,6 +3,7 @@ import { AnimatedSection } from './components/AnimatedSection'
 import { CookieCtaCard } from './components/CookieCtaCard/CookieCtaCard'
 import { CookieJarModal } from './components/CookieJarModal/CookieJarModal'
 import { RejectCookieModal } from './components/RejectCookieModal/RejectCookieModal'
+import { SiteFooter } from './components/SiteFooter/SiteFooter'
 import { SnapshotCard } from './components/SnapshotCard/SnapshotCard'
 import {
   REVEAL_CSS_VAR_CARD_SHADOW_DELAY,
@@ -102,6 +103,8 @@ function App() {
           onOpenJar={() => setAcceptModalOpen(true)}
           revealDelayMs={REVEAL_DELAY_COOKIE_CARD_MS}
         />
+
+        <SiteFooter />
       </div>
 
       {rejectModalOpen && (
