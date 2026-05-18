@@ -1,0 +1,41 @@
+.soft-button {
+  border: none;
+  border-radius: 1rem;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  box-shadow: var(--soft-shadow-sharp);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-weight: 600;
+}
+
+.soft-button:hover {
+  transform: translateY(-1px);
+}
+
+.soft-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+}
+
+.soft-button--muted {
+  background: #e7dfd4;
+  color: #3e352f;
+}
+
+.soft-button--primary {
+  background: #92400e;
+  color: #fff;
+}
+
+.button-row {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.soft-button--full {
+  width: 100%;
+  margin-top: 1rem;
+}

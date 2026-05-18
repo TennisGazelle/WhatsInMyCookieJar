@@ -1,6 +1,6 @@
 # WhatsInMyCookieJar
 
-One-page demo: what a browser can infer before you click “Accept Cookies,” plus a mocked cookie-jar modal.
+One-page demo: what a browser can infer before you click “Accept Cookies,” plus a cookie jar that lists real same-origin cookies (name and value).
 
 **Agent / contributor docs:** [.cursor/README.md](.cursor/README.md)
 
@@ -9,6 +9,8 @@ One-page demo: what a browser can infer before you click “Accept Cookies,” p
 | Path | Role |
 |------|------|
 | `index.html` + `src/` | React + Vite app (production target) |
+| `src/components/` | Cards, modals, tables (colocated CSS) |
+| `src/utils/cookies.ts` | Same-origin cookie reads for the jar modal |
 | `prototype-goal.html` | Original static reference implementation |
 | `src/styles/reveal-animations.css` | Shared text/card reveal animations (copied to `styles/` on build for prototype) |
 | `.cursor/` | Hub/spoke documentation for agents |

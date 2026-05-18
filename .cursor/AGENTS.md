@@ -26,7 +26,7 @@ Also update [../README.md](../README.md) when user-facing run/deploy instruction
 
 ## Code conventions
 
-- **No magic strings.** Animation class names, stagger delays, and repeated literals belong in [../src/constants/reveal.ts](../src/constants/reveal.ts) (or a shared constants module). Import where needed.
+- **No magic strings.** Animation class names, stagger delays, and repeated literals belong in [../src/constants/reveal.ts](../src/constants/reveal.ts) (or a shared constants module). Tracker name metadata lives in [../src/constants/knownTrackers.ts](../src/constants/knownTrackers.ts) (enrichment only). Cookie reads belong in [../src/utils/cookies.ts](../src/utils/cookies.ts).
 - **Single source for reveal CSS:** [../src/styles/reveal-animations.css](../src/styles/reveal-animations.css) — imported by React; `prebuild` copies to `styles/` and `public/styles/` for [../prototype-goal.html](../prototype-goal.html). Do not fork animation rules into `App.css`.
 - **Production target:** Vite build output (`dist/`) deployed to GitHub Pages — see [PRODUCTION.md](PRODUCTION.md).
 

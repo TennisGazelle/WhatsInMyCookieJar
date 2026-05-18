@@ -1,0 +1,47 @@
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #e6ded5;
+  border-radius: 0.8rem;
+  overflow: hidden;
+}
+
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 0.85rem 0.95rem;
+  border-bottom: 1px solid #e6ded5;
+}
+
+.data-table td:last-child {
+  text-align: right;
+}
+
+.data-table tr:last-child th,
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table thead th {
+  background: #f5f0ea;
+}
+
+.data-table--value-last td:last-child {
+  text-align: right;
+}
+
+.data-table__cookie-name {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.data-table__value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9rem;
+  word-break: break-all;
+}
+
+@media (max-width: 760px) {
+  .data-table td:last-child {
+    text-align: left;
+  }
+}
