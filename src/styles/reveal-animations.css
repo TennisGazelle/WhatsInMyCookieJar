@@ -1,0 +1,311 @@
+:root {
+  --color--main: #f6f1ea;
+  --soft-shadow-sharp: 1px 5px 0 rgba(0, 0, 0, 0);
+  --soft-shadow-relaxed: 1px 5px 32px rgba(0, 0, 0, 0.3);
+}
+
+.has-animation.animation-text-swipe blockquote {
+  text-shadow: var(--soft-shadow-sharp);
+}
+
+.has-animation {
+  position: relative;
+  overflow: hidden;
+}
+
+.has-animation:not(.animation-card-swipe) p,
+.has-animation:not(.animation-card-swipe) h1,
+.has-animation:not(.animation-card-swipe) blockquote,
+.has-animation:not(.animation-card-swipe) img {
+  opacity: 0;
+}
+
+.has-animation.animate-in::before,
+.has-animation.animate-in::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: 100%;
+  z-index: 10;
+}
+
+.has-animation.animation-ltr.animate-in::before,
+.has-animation.animation-ltr.animate-in::after {
+  left: 0;
+}
+
+.has-animation.animation-rtl.animate-in::before,
+.has-animation.animation-rtl.animate-in::after {
+  right: 0;
+}
+
+.has-animation.animate-in::before {
+  background-color: var(--color--main);
+}
+
+.has-animation.animate-in::after {
+  background-color: color-mix(in oklab, var(--color--main) 40%, black);
+  animation-delay: 0.5s;
+}
+
+.has-animation.animate-in:not(.animation-text-swipe) h1,
+.has-animation.animate-in:not(.animation-text-swipe) p,
+.has-animation.animate-in:not(.animation-text-swipe) img {
+  animation: textHidden 0.1s 1.1s forwards;
+}
+
+.has-animation.animation-text-swipe h1,
+.has-animation.animation-text-swipe p,
+.has-animation.animation-text-swipe blockquote,
+.has-animation.animation-text-swipe img {
+  opacity: 1;
+  -webkit-mask-image: linear-gradient(90deg, #000 50%, transparent 50%);
+  mask-image: linear-gradient(90deg, #000 50%, transparent 50%);
+  -webkit-mask-size: 200% 100%;
+  mask-size: 200% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+}
+
+.has-animation.animation-text-swipe.animate-in::before,
+.has-animation.animation-text-swipe.animate-in::after {
+  display: none;
+}
+
+.has-animation.animation-text-swipe.animate-in h1,
+.has-animation.animation-text-swipe.animate-in p,
+.has-animation.animation-text-swipe.animate-in img {
+  animation: textSwipeLTR 1.8s ease forwards;
+}
+
+.has-animation.animation-text-swipe.animate-in blockquote {
+  animation: quoteSwipeLTR 1.8s ease forwards;
+}
+
+.has-animation.animation-text-swipe.animation-rtl.animate-in h1,
+.has-animation.animation-text-swipe.animation-rtl.animate-in p,
+.has-animation.animation-text-swipe.animation-rtl.animate-in img {
+  -webkit-mask-image: linear-gradient(270deg, #000 50%, transparent 50%);
+  mask-image: linear-gradient(270deg, #000 50%, transparent 50%);
+  animation: textSwipeRTL 1.8s ease forwards;
+}
+
+.has-animation.animation-text-swipe.animation-rtl.animate-in blockquote {
+  -webkit-mask-image: linear-gradient(270deg, #000 50%, transparent 50%);
+  mask-image: linear-gradient(270deg, #000 50%, transparent 50%);
+  animation: quoteSwipeRTL 1.8s ease forwards;
+}
+
+.card.has-animation.animation-card-swipe {
+  opacity: 0;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+}
+
+.card.has-animation.animation-card-swipe h1,
+.card.has-animation.animation-card-swipe h2,
+.card.has-animation.animation-card-swipe p,
+.card.has-animation.animation-card-swipe img {
+  opacity: 1;
+}
+
+.card.has-animation.animation-card-swipe.animate-in::before,
+.card.has-animation.animation-card-swipe.animate-in::after {
+  display: none;
+}
+
+.card.has-animation.animation-card-swipe.animate-in {
+  animation:
+    cardFadeIn 0.95s cubic-bezier(0.4, 0, 0.2, 1) var(--card-shadow-delay, 0ms) forwards,
+    cardShadowIn 1.2s ease var(--card-shadow-delay, 0ms) forwards;
+}
+
+.has-animation.animation-ltr.animate-in::before {
+  animation: revealLTR 1.8s ease;
+}
+
+.has-animation.animation-ltr.animate-in::after {
+  animation: revealLTR 1s 0.6s ease;
+}
+
+.has-animation.animation-rtl.animate-in::before {
+  animation: revealRTL 1.8s ease;
+}
+
+.has-animation.animation-rtl.animate-in::after {
+  animation: revealRTL 1s 0.6s ease;
+}
+
+.card.has-animation.animation-card-swipe.animate-in .soft-button,
+.modal.show .soft-button {
+  animation: softShadowIn 1.2s ease var(--card-shadow-delay, 0ms) forwards;
+}
+
+@keyframes revealRTL {
+  0% {
+    width: 0;
+    right: 0;
+  }
+  65% {
+    width: 100%;
+    right: 0;
+  }
+  100% {
+    width: 0;
+    right: 100%;
+  }
+}
+
+@keyframes revealLTR {
+  0% {
+    width: 0;
+    left: 0;
+  }
+  65% {
+    width: 100%;
+    left: 0;
+  }
+  100% {
+    width: 0;
+    left: 100%;
+  }
+}
+
+@keyframes textHidden {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes textSwipeLTR {
+  0% {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+  100% {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}
+
+@keyframes textSwipeRTL {
+  0% {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+  100% {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}
+
+@keyframes quoteSwipeLTR {
+  0% {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+    text-shadow: var(--soft-shadow-sharp);
+  }
+  100% {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+    text-shadow: var(--soft-shadow-relaxed);
+  }
+}
+
+@keyframes quoteSwipeRTL {
+  0% {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+    text-shadow: var(--soft-shadow-sharp);
+  }
+  100% {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+    text-shadow: var(--soft-shadow-relaxed);
+  }
+}
+
+@keyframes softShadowIn {
+  0% {
+    box-shadow: var(--soft-shadow-sharp);
+  }
+  100% {
+    box-shadow: var(--soft-shadow-relaxed);
+  }
+}
+
+@keyframes cardFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes cardShadowIn {
+  0% {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+  }
+  100% {
+    box-shadow: -2px 25px 23px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: -2px 25px 23px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: -2px 25px 23px 0px rgba(0, 0, 0, 0.75);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .has-animation p,
+  .has-animation h1,
+  .has-animation blockquote,
+  .has-animation img {
+    opacity: 1;
+  }
+
+  .has-animation.animate-in::before,
+  .has-animation.animate-in::after {
+    display: none;
+  }
+
+  .has-animation.animate-in h1,
+  .has-animation.animate-in p,
+  .has-animation.animate-in img {
+    animation: none;
+  }
+
+  .has-animation.animation-text-swipe h1,
+  .has-animation.animation-text-swipe p,
+  .has-animation.animation-text-swipe blockquote,
+  .has-animation.animation-text-swipe img {
+    -webkit-mask: none;
+    mask: none;
+  }
+
+  .has-animation.animation-text-swipe blockquote {
+    text-shadow: var(--soft-shadow-relaxed);
+  }
+
+  .soft-button {
+    box-shadow: var(--soft-shadow-relaxed);
+    animation: none;
+  }
+
+  .card.has-animation.animation-card-swipe {
+    opacity: 1;
+    box-shadow: -2px 25px 23px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: -2px 25px 23px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: -2px 25px 23px 0px rgba(0, 0, 0, 0.75);
+  }
+
+  .card.has-animation.animation-card-swipe.animate-in {
+    animation: none;
+  }
+}
