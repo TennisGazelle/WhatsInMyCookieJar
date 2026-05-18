@@ -4,11 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "prebuild": "mkdir -p public/styles styles && cp src/styles/reveal-animations.css public/styles/ && cp src/styles/reveal-animations.css styles/ && cp prototype-goal.html public/prototype-goal.html && sed -i 's|href=\"styles/|href=\"/styles/|g' public/prototype-goal.html",
+    "prebuild": "mkdir -p public/styles styles && cp src/styles/reveal-animations.css public/styles/ && cp src/styles/reveal-animations.css styles/",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean": "rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
     "react": "^19.2.6",
