@@ -28,18 +28,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Prepare static site
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install and build
         run: |
-          mkdir -p dist
-          rsync -av \
-            --exclude='.git' \
-            --exclude='.github' \
-            ./ dist/
-
-          # Optional but useful if you are using a custom domain.
-          echo "www.whatsinmycookiejar.com" > dist/CNAME
-
-          # Prevent GitHub Pages from trying to process the site with Jekyll.
+          npm ci
+          npm run build
           touch dist/.nojekyll
 
       - name: Configure GitHub Pages
